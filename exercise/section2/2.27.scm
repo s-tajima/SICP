@@ -1,5 +1,7 @@
 ;= Question =============================================================================
 ;
+; 問題 2.27
+;
 ; 問題2.18の手続きreverseを修正し, 引数としてリストをとり,  
 ; 要素を逆順にし, 更に部分木も奥まで逆順にする手続き deep-reverseを作れ. 
 ; 例えば
@@ -35,3 +37,9 @@
 (print (my-deep-reverse y))
 (print (my-deep-reverse z))
 
+(define (my-deep-reverse2 l)
+  (if (list? l) (my-reverse (map my-deep-reverse2 l)) l))
+
+(print (my-deep-reverse2 x))
+(print (my-deep-reverse2 y))
+(print (my-deep-reverse2 z))
