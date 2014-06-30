@@ -44,6 +44,18 @@
 (define (make-branch length structure)
   (list length structure))
 
+(define b1 (make-branch 1 2))
+(define b2 (make-branch 3 4))
+(define m1 (make-mobile b1 b2))
+
+(define b3 (make-branch 1 m1))
+(define m2 (make-mobile b3 b1))
+
+(define b4 (make-branch 2 m2))
+(define b5 (make-branch 2 5))
+
+(define root-mobile (make-branch b4 b5)) ; W : 8 + 5 = 13
+
 ;= Answer ===============================================================================
 
 ; a
@@ -64,25 +76,32 @@
 (define (total-weight mobile)
   (let ((l (branch-structure (left-branch mobile)))
         (r (branch-structure (right-branch mobile))))
-       (+ (if (pair? l) (total-weight l) (if (null? l) 0 l))
-          (if (pair? r) (total-weight r) (if (null? r) 0 r)))))
+       (if (pair? mobile) 
+           (+ (if (pair? l) (total-weight l) (if (null? l) 0 l))
+              (if (pair? r) (total-weight r) (if (null? r) 0 r)))
+           mobile)))
 
-(print (total-weight (make-mobile (make-branch 1 5) (make-branch 3 4))))
+; c
+(define (branch-weight b)
+  (let ((s (branch-structure b)))
+    (if (not (pair? s))
+        s
+        (total-weight s))))
 
-(define b1 (make-branch 1 2))   ; W : 2
-(define b2 (make-branch 3 4))   ; W : 4
-(define m1 (make-mobile b1 b2)) ; W : 2 + 4 = 6
+(define (balanced? m)
+  (define (branch-balance b)
+    (* (branch-length b) (branch-weight b)))
+  (if (not (pair? m))
+      #t
+      (let ((l (left-branch m))
+            (r (right-branch m)))
+        (and (= (branch-balance l)
+                (branch-balance r))
+             (balanced? (branch-structure l))
+             (balanced? (branch-structure r))))))
 
-(define b3 (make-branch 1 m1))  ; W : 6
-(define m2 (make-mobile b3 b1)) ; W : 6 + 2 = 8
-
-(define b4 (make-branch 2 m2))  ; W : 8
-(define b5 (make-branch 2 5))   ; W : 5
-(define root-mobile (make-branch b4 b5)) ; W : 8 + 5 = 13
-(print (total-weight root-mobile))
-
-
-
+(print (balanced? (make-mobile (make-branch 2 5) (make-branch 1 10))))
+(print (balanced? (make-mobile (make-branch 1 5) (make-branch 1 10))))
 
 
 
