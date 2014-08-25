@@ -72,15 +72,34 @@
             (queen-cols (- k 1))))))
       (queen-cols board-size))
 
-(define (empty-board) nil)
+(define (adjoin-position new-row k rest-of-queens)
+    (append rest-of-queens (list (list new-row k))))
 
-(define (adjoin-position new-row k rest-of-queens) 
-  (list rest-of-queens (list new-row k)))
+(define (get k l)
+  (if (< k 2) (car l) (get (- k 1) (cdr l))))
 
-(define (safe? k positions) #t)
+(define (getUntil k l)
+  (if (> k 1) (cons (car l) (getUntil (- k 1) (cdr l))) ()))
 
-(print (adjoin-position 4 3 (list (list 1 2) (list 2 4) (list 3 1))))
+(define (getX p) (car p))
+(define (getY p) (car (cdr p)))
 
-(print (queens 4))
+(define (safe? k positions)
+  (define (conflict? new-pos queen)
+    (cond ((= (getX queen) (+ (getX new-pos) (- (getY queen) (getY new-pos)))) #t)
+          ((= (getX queen) (- (getX new-pos) (- (getY queen) (getY new-pos)))) #t)
+          ((= (getX new-pos) (getX queen)) #t)
+          (else #f)))
+  (define (hoge one others)
+    (if (pair? others)
+        (and (not (conflict? one (car others))) (hoge one (cdr others)))
+        #t))
+  (let ((newone (get k positions))
+        (others (getUntil k positions)))
+       (hoge newone others)))
+
+(define empty-board ())
+
+(print (queens 3))
 
 
