@@ -10,4 +10,4 @@
       (cadr p)
       (exp-cdr p)))
  
- (print (augend '(+ 1 2 3)))
+ (print (augend '(+ 1 2)))
