@@ -14,9 +14,8 @@
 ;= Answer ===============================================================================
 
 (define f
-  (let ((y 10))
-  (lambda (x) 
-    (if (= y 10) (begin (set! y x) y) (begin (set! y x) 0)))))
+  (let ((y 1))
+  (lambda (x) (begin (set! y (* y x)) y))))
 
 ;(print (+ (f 0) (f 1)))
 (print (+ (f 1) (f 0)))
