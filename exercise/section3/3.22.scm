@@ -57,7 +57,7 @@
     (cond ((eq? m 'insert-queue!) insert-queue!)
           ((eq? m 'delete-queue!) delete-queue!)
           ((eq? m 'print-queue) print-queue)
-          (else (error "Unknown request -- MAKE-ACCOUNT"
+          (else (error "Unknown request -- MAKE-QUEUE"
                        m))))
   dispatch))
 
