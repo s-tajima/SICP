@@ -1,59 +1,22 @@
 ;= Question =============================================================================
 ;  
-; 問題 3.50
+; 問題 3.51
 ; 
-; 2.2.1節, 脚注12のmapと似た複数の引数をとる手続きを許すように
-; stream-mapを一般化する次の定義を完成せよ.
+; 遅延評価がよく見えるように, 引数を印字してからそれを返すだけの次の手続きを使おう.
 ; 
-; (define (stream-map proc . argstreams)
-;   (if (⟨??⟩ (car argstreams))
-;       the-empty-stream
-;       (⟨??⟩
-;         (apply proc (map ⟨??⟩ argstreams))
-;         (apply stream-map
-;                (cons proc (map ⟨??⟩ argstreams))))))
+; (define (show x)
+;   (display-line x)
+;     x)
+; 
+; 次のそれぞれの式の評価に応じて, 解釈系は何を印字するか.59
+; 
+; (define x (stream-map show (stream-enumerate-interval 0 10)))
+; 
+; (stream-ref x 5)
+; 
+; (stream-ref x 7)
 ;
 ;= Prepared =============================================================================
-
-(define (square n)
-  (* n n))
-
-(define (smallest-divisor n)
-  (find-divisor n 2))
-
-(define (find-divisor n test-divisor)
-  (cond ((> (square test-divisor) n) n)
-        ((divides? test-divisor n) test-divisor)
-        (else (find-divisor n (+ test-divisor 1)))))
-
-(define (divides? a b)
-  (= (remainder b a) 0))
-
-(define (prime? n)
-  (= n (smallest-divisor n)))
-
-(define (enumerate-interval low high) 
-  (if (> low high) 
-      () 
-      (cons low (enumerate-interval (+ low 1) high)))) 
-
-(define (accumulate op initial sequence)
-  (if (null? sequence)
-      initial
-      (op (car sequence)
-                (accumulate op initial (cdr sequence)))))
-
-(define (sum-primes-1 a b)
-  (define (iter count accum)
-    (cond ((> count b) accum)
-          ((prime? count) (iter (+ count 1) (+ count accum)))
-          (else (iter (+ count 1) accum))))
-  (iter a 0))
-
-(define (sum-primes-2 a b)
-  (accumulate +
-              0
-              (filter prime? (enumerate-interval a b))))
 
 (define (stream-ref s n)
   (if (= n 0)
@@ -107,10 +70,6 @@
                                      (stream-cdr stream))))
         (else (stream-filter pred (stream-cdr stream)))))
 
-(define (stream-sum-primes a b)
-  (accumulate +
-              0
-              (stream-filter prime? (stream-enumerate-interval a b))))
 
 (define (stream-ref s n)
   (if (= n 0)
@@ -129,15 +88,9 @@
       (begin (proc (stream-car s))
              (stream-for-each proc (stream-cdr s)))))
 
-
-;= Answer ===============================================================================
-
-;(print get-universal-time)
-;(print (sum-primes-1 1 10))
-;(print (sum-primes-2 1 10))
-;(print (sum-primes-1 10000 10000000))
-;(print (sum-primes-2 10000 1000000))
-;(print (stream-sum-primes 10000 1000000))
+(define (show x)
+  (display-line x)
+    x)
 
 (define (stream-map proc . argstreams)
   (if (stream-null? (car argstreams))
@@ -147,7 +100,16 @@
         (apply stream-map
                (cons proc (map stream-cdr argstreams))))))
 
+;= Answer ===============================================================================
 
-(print (stream-map + (stream-enumerate-interval 1 10) (stream-enumerate-interval 21 30)))
+(define x (stream-map show (stream-enumerate-interval 0 10)))
+
+(print)
+(print (stream-ref x 5))
+(print (stream-ref x 7))
+
+
+
+
 
 ;= Test =================================================================================
