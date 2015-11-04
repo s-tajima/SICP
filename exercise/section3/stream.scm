@@ -58,3 +58,19 @@
         (apply proc (map stream-car argstreams))
         (apply stream-map
                (cons proc (map stream-cdr argstreams))))))
+
+(define (mul-streams s1 s2)
+  (stream-map * s1 s2))
+
+(define (add-streams s1 s2)
+  (stream-map + s1 s2))
+
+(define (stream-head s n)
+  (define (iter s n)
+    (if (<= n 0)
+        'done
+        (begin
+          (display (stream-car s))
+          (display ", ")
+          (iter (stream-cdr s) (- n 1)))))
+  (iter s n))
