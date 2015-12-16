@@ -74,3 +74,9 @@
           (display ", ")
           (iter (stream-cdr s) (- n 1)))))
   (iter s n))
+
+(define (integers-starting-from n)
+  (cons-stream n (integers-starting-from (+ n 1))))
+
+(define integers (integers-starting-from 1))
+
