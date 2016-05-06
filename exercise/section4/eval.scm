@@ -106,8 +106,6 @@
     (caadr exp))) ; (define (proc a1 a1) body)
 
 (define (definition-value exp)
-  (show " def value" exp)
-
   (if (symbol? (cadr exp))
     (caddr exp)
     (make-lambda (cdadr exp)   ; parameters
@@ -331,13 +329,9 @@
 
 ; simultaneous variable assignment
 (define (scan-out-defines body)
-  (show "scanning out body" body)
   (let ; split out define statements and the non-definition statements
     ((define-statements (filter definition? body))
      (body-statements (filter (lambda (s) (not (definition? s))) body)))
-
-     (show "define-statements" define-statements)
-     (show "body-statements" body-statements)
 
      (if (null? define-statements)
        body ; if there are no define-statements, just use the original body
@@ -351,7 +345,6 @@
                (append ; body: set!s for variable assignment and then the rest of the body
                  (map (lambda (s) (cons 'set! s)) (zip variables expressions))
                  body-statements))))
-                 (show "scanned out" ret)
                  (list ret))) ; receives a list of expressions, and so must return a list of expressions
            )))
 
@@ -432,6 +425,7 @@
         (list '> >)
         (list '+ +)
         (list '- -)
+        (list '* *)
         (list 'symbol? symbol?)
         (list 'display display)
         (list 'newline newline)
