@@ -194,12 +194,13 @@
 ; (define (let-bindings exp) (cadr exp))
 ; (define (let-body exp) (cddr exp))
 (define (named-let? exp)
-(not (pair? (cadr exp))))
+  (not (pair? (cadr exp))))
 
 (define (let-bindings exp)
   (if (named-let? exp)
     (caddr exp)
     (cadr exp)))
+
 (define (let-body exp)
   (if (named-let? exp)
     (cdddr exp)
@@ -428,6 +429,7 @@
         (list '* *)
         (list 'symbol? symbol?)
         (list 'display display)
+        (list 'print print)
         (list 'newline newline)
         ; ... we can add more
         ))
@@ -479,6 +481,8 @@
     (display (list 'compound-procedure
                    (procedure-parameters object)
                    (procedure-body object)
+
+
                    '<procedure-env>))
     (display object)))
 
