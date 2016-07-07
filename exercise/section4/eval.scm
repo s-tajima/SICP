@@ -1,6 +1,5 @@
 (define apply-in-underlying-scheme apply)
 
-
 ;; EVAL
 (define (eval exp env)
   (cond ((self-evaluating? exp) exp)
